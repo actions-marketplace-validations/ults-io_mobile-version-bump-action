@@ -1,0 +1,33 @@
+name: 'Mobile Version Bump'
+description: 'Bump Android & iOS versions'
+
+inputs:
+  android-project-path:
+    description: '*Required. The path to the Android project. If not provided, the Android version will not be bumped.'
+    required: false
+  ios-project-path:
+    description: '*Required. The path to the iOS project. If not provided, the iOS version will not be bumped.'
+    required: false
+  bump-type:
+    description: 'The type of bump to perform. Can be one of: major, minor, patch.'
+    required: false
+  build-number:
+    description: 'The build number to use for the iOS version. If not provided, the build number will be incremented by 1.'
+    required: false
+  version-code:
+    description: 'The version code to use for the Android version. If not provided, the version code will be incremented by 1.'
+    required: false
+
+outputs:
+  android-version:
+    description: 'The new Android version.'
+  android-version-code:
+    description: 'The new Android version code.'
+  ios-version:
+    description: 'The new iOS version.'
+  ios-build-number:
+    description: 'The new iOS build number.'
+
+runs:
+  using: 'node16'
+  main: './dist/index.js'
