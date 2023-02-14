@@ -1,6 +1,6 @@
 import { setFailed, getInput } from "@actions/core"
-import { bumpAndroidVersion, bumpVersionCode } from "./android"
-import { bumpBuildNumber, bumpIosVersion } from "./ios"
+import { bumpAndroidValues } from "./android"
+import { bumpIosValues } from "./ios"
 import { Input } from "./types"
 
 const run = () => {
@@ -10,15 +10,8 @@ const run = () => {
   const versionCode = getInput(Input.VersionCode)
   const buildNumber = getInput(Input.BuildNumber)
 
-  if (iosPath) {
-    bumpBuildNumber(iosPath, parseInt(buildNumber))
-    if (bumpType) bumpIosVersion(iosPath, bumpType)
-  }
-
-  if (androidPath) {
-    bumpVersionCode(androidPath, parseInt(versionCode))
-    if (bumpType) bumpAndroidVersion(androidPath, bumpType)
-  }
+  if (iosPath) bumpIosValues({ iosPath, buildNumber, bumpType })
+  if (androidPath) bumpAndroidValues({ androidPath, versionCode, bumpType })
 }
 
 try {

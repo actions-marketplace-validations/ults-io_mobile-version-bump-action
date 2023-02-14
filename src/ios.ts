@@ -3,7 +3,7 @@ import { getExecOutput } from "@actions/exec"
 import { bumpedVersion } from "./helpers"
 import { Output } from "./types"
 
-export async function bumpIosVersion(path: string, bumpType: string) {
+async function bumpIosVersion(path: string, bumpType: string) {
   const options = { cwd: path }
   const { stdout: currentIosVersion } = await getExecOutput("agvtool", ["what-marketing-version"], options)
   const version = bumpedVersion(currentIosVersion.toString().trim(), bumpType)
@@ -12,9 +12,14 @@ export async function bumpIosVersion(path: string, bumpType: string) {
   setOutput(Output.IosVersion, iosVersion.toString().trim())
 }
 
-export async function bumpBuildNumber(path: string, buildNumber?: number) {
+async function bumpBuildNumber(path: string, buildNumber?: string) {
   const command = buildNumber ? "new-version" : "next-version"
-  const { stdout: iosBuildNumber } = await getExecOutput("agvtool", [command, buildNumber?.toString()], { cwd: path })
+  const { stdout: iosBuildNumber } = await getExecOutput("agvtool", [command, buildNumber], { cwd: path })
 
   setOutput(Output.IosBuildNumber, iosBuildNumber.toString().trim())
+}
+
+export function bumpIosValues({ iosPath, buildNumber, bumpType }: { iosPath: string; buildNumber?: string; bumpType: string }) {
+  bumpIosVersion(iosPath, bumpType)
+  bumpBuildNumber(iosPath, buildNumber)
 }
